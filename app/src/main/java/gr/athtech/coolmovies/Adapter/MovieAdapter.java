@@ -1,0 +1,87 @@
+package gr.athtech.coolmovies.Adapter;
+
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+import gr.athtech.coolmovies.Activity.DetailsActivity;
+import gr.athtech.coolmovies.Model.MovieData;
+import gr.athtech.coolmovies.R;
+
+
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.viewHolder> {
+
+    Context context;
+    List<MovieData> movieData;
+
+
+    public MovieAdapter(Context context, List<MovieData> movieData) {
+        this.movieData = movieData;
+        this.context = context;
+    }
+
+    @NonNull
+    @Override
+    public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View view = layoutInflater.inflate(R.layout.movie_item_list, parent, false);
+        viewHolder viewHolder = new viewHolder(view);
+        viewHolder.view_container.setOnClickListener(v -> {
+            Intent i = new Intent(context, DetailsActivity.class);
+            i.putExtra("movie_name", movieData.get(viewHolder.getAdapterPosition()).getTitle());
+            i.putExtra("movie_date", movieData.get(viewHolder.getAdapterPosition()).getReleaseDate());
+            i.putExtra("movie_text_rating", movieData.get(viewHolder.getAdapterPosition()).getVoteAverage());
+            i.putExtra("movie_description", movieData.get(viewHolder.getAdapterPosition()).getOverview());
+            i.putExtra("movie_image_cover", movieData.get(viewHolder.getAdapterPosition()).getPosterPath());
+            context.startActivity(i);
+        });
+
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull final viewHolder holder, int position) {
+        final MovieData temp = movieData.get(position);
+        holder.textViewName.setText(movieData.get(position).getTitle());
+        holder.textViewDate.setText(new StringBuilder().append("Released: ").append(movieData.get(position).getReleaseDate()));
+        Picasso.get().load(movieData.get(position).getPosterPath()).fit().centerCrop().into(holder.movieImage);
+        holder.textViewMRating.setText(String.valueOf(movieData.get(position).getVoteAverage()));
+    }
+
+    @Override
+    public int getItemCount() {
+        return movieData.size();
+    }
+
+
+    public class viewHolder extends RecyclerView.ViewHolder {
+        ImageView movieImage;
+        TextView textViewName;
+        TextView textViewDate;
+        TextView textViewMRating;
+        LinearLayout view_container;
+
+
+        public viewHolder(@NonNull View itemView) {
+            super(itemView);
+            view_container = itemView.findViewById(R.id.view_container);
+            movieImage = itemView.findViewById(R.id.movie_imageView);
+            textViewName = itemView.findViewById(R.id.textName);
+            textViewDate = itemView.findViewById(R.id.textDate);
+            textViewMRating = itemView.findViewById(R.id.ratingText);
+        }
+    }
+
+}

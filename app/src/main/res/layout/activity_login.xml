@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:background="@drawable/background"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".Activity.LoginActivity">
 
     <EditText
         android:id="@+id/username"
@@ -43,7 +43,6 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:textColorHint="@color/primaryColor" />
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
